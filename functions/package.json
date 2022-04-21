@@ -17,7 +17,9 @@
     "deepl": "^1.0.13",
     "firebase-admin": "^10.0.2",
     "firebase-functions": "^3.20.1",
+    "fs": "^0.0.1-security",
     "openai": "^2.0.5",
+    "rss-parser": "^3.12.0",
     "twitter-api-v2": "^1.12.0"
   },
   "devDependencies": {
