@@ -42,13 +42,13 @@ const promptDatabase = [
   "Write a short Tweet which advises people how to battle gender inequality",
   "Write a short Tweet which explains how sexism in advertisement supports rape culture",
   "Write a short Tweet which explains how are women objectified in advertisement and how that supports rape culture",
-  "Write a short Tweet which explains what is rape culture",
+  "Write a short Tweet which explains what is rape culture and quotes scientific research about rape culture",
   "Write a short Tweet how to stand up against sexism as a male",
   "Write a short Tweet that raises a question about recent sexistic ads that others saw",
   "Write a short Tweet that asks about recent acts of sexism in everyday life",
-  "Generate a Tweet about: How does sexism in advertisement negatively impact society?",
-  "Generate a Tweet about: Can you present a scientific fact about gender inequality?",
-  "Generate a Tweet about: How has feminism changed over time, and what impact has it had on society as a whole?"
+  "Generate a Tweet that answers the following: How does sexism in advertisement negatively impact society?",
+  "Generate a Tweet that answers the following: Can you present a scientific fact about gender inequality?",
+  "Generate a Tweet that answers the following: How has feminism changed over time, and what impact has it had on society as a whole?"
 ];
 
 const randomPrompt = promptDatabase[Math.floor(Math.random() * promptDatabase.length)];
@@ -210,19 +210,3 @@ exports.tweet = functions.https.onRequest(async (request, response) => {
 
 });
 */
-
-
-// TODO: improve prompts!
-// TODO: include emojis.  
-// TODO: add cron function for periodic tweeting
-// TODO: RSS feed: scrape URLs for headers/titles -> pass to vaderSentiment -> positive titles ->
-// -> randomize -> most positive title wins -> pass title to openAI with prefix: give me your opinion about this title
-// -> translate -> tweet the URL
-    // -> https://www.geeksforgeeks.org/extract-feed-details-from-rss-in-python/ 
-    // -> feed title to openAI -> classify -> pick most positive
-    // -> openAI -> give me your opinion about this title
-// TODO: include: liking, following, retweeting + schedule
-// TODO: include: tweeting generated images with text (I saw it in one repo, forked it)
-// TODO: include: responding to tweets that end with question mark via openai
-// that would be probably much easier to do in python because I know syntax for twitter api better
-// FINAL PRODUCT
