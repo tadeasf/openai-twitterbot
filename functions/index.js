@@ -4,6 +4,9 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
 const translate = require("deepl");
+const config = require("./config");
+const streamConfig = require("./stream-config");
+const Twit = require("twit")
 // const Parser = require("rss-parser");
 // const fs = require("fs");
 
@@ -13,15 +16,16 @@ const dbRef = admin.firestore().doc("tokens/demo");
 // Twitter API init
 const TwitterApi = require("twitter-api-v2").default;
 const twitterClient = new TwitterApi({
-	clientId: "Yk9WWVdEX2RWOUQ3Y1B3SWlBZzE6MTpjaQ",
-	clientSecret: "dz6ChUCtU3VrR-4oDw02s8MH2j808dmBGpDhpNwQ14IBDEAhmu",
+	clientId: config.clientID,
+	clientSecret: config.clientSecret,
 });
 
 // OpenAI API init
 const { Configuration, OpenAIApi } = require("openai");
+const Twit = require("twit");
 const configuration = new Configuration({
-	organization: "org-xGhGkhzFmS0ZZ65TpWTLC9jO",
-	apiKey: "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",
+	organization: config.organization,
+	apiKey: config.API_key,
 });
 const openai = new OpenAIApi(configuration);
 
@@ -143,7 +147,7 @@ exports.tweet = functions.https.onRequest(async (request, response) => {
 			free_api: true,
 			text: aiTweetgen,
 			target_lang: "CS",
-			auth_key: "e827c980-8a22-0448-5d56-5de4d0cf20a9:fx", // do not steal this!
+			auth_key: config.auth_key, // do not steal this!
 			split_sentences: "0", // no /n and other shit
 		});
 	} catch (e) {
@@ -173,6 +177,41 @@ exports.tweet = functions.https.onRequest(async (request, response) => {
 		response.send(data);
 	}
 });
+
+// liking and retweeter bot
+exports.retweet = functions.https.onRequest(async (request, response) => {
+	const {
+		client: refreshedClient,
+		accessToken,
+		refreshToken: newRefreshToken,
+	} = await twitterClient.refreshOAuth2Token(refreshToken);
+
+	await dbRef.set({ accessToken, refreshToken: newRefreshToken });
+
+	const streamy = new Twit(streamConfig);
+
+	const stream = streamy.stream("statuses/filter", { track: phrase })
+	stream.on("tweet", tweetID);
+
+	const phrase = "I feel like I";
+	const regex = ""
+
+	let tweetID;
+	try  {
+		if (regex.test(tweet.text)) {
+			return tweetID = tweet.id_str;
+		}
+		else { 
+			console.log("didnt manage to grab a tweet")
+		}
+	}
+	catch (e) {
+		console.log(e);
+	};
+
+	const { data } = await refreshedClient.v2.retweet(tweetID);
+	response.send(data);
+}
 /*
 // TWEET BOT manual
 exports.tweet = functions.https.onRequest(async (request, response) => {
